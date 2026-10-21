@@ -71,38 +71,28 @@ Put pseudocode in this box:
 ```
 Helper Functions: CALCULATE the scores for above, left and diagonal 
 
-  get_node_above()
-
+def get_node_above()
     GET value from the cell above
-
     IF greater than 0
-    
-    ADD either match score, mismatch penalty or gap penalty
-
+        ADD either match score, mismatch penalty or gap penalty
     ELSE return 0
   
-  get_node_left()
-
+def get_node_left()
     GET value from the cell to the left
-
     IF greater than 0
-    
-    ADD either match score, mismatch penalty or gap penalty
-
+        ADD either match score, mismatch penalty or gap penalty
     ELSE return 0
 
-  get_node_diag()
-
+def get_node_diag()
     GET value from the cell diagonal
-
     IF greater than 0
-    
-    ADD either match score, mismatch penalty or gap penalty
-
+        ADD either match score, mismatch penalty or gap penalty
     ELSE return 0
+```
+```
+Main functions: Perform Smith-Waterman algorithm for optimal aligned sequences
 
-cal_score()
-
+def cal_score()
     left ←  CALL get_node_left(value to the left of matrix[i][j])
     up ← CALL get_node_above(value above matrix[i][j])
     diagonal ← CALL get_node_diag(value diagonally above-left of matrix[i][j])
@@ -130,15 +120,13 @@ cal_score()
 
     RETURN score, trace
 
-traceback()
-
+def traceback()
     aligned_seq1 ← empty string
     aligned_seq2 ← empty string
 
     (i, j) ← maximum_position
 
     WHILE i > 0 AND j > 0:
-
         current_move ← traceback_matrix[i][j]
 
         IF current_move = DIAGONAL:
@@ -164,9 +152,8 @@ traceback()
 
     RETURN aligned_seq1, aligned_seq2
 
-smith_waterman()
-
- CREATE score_matrix and traceback_matrix with dimensions:
+def smith_waterman()
+    CREATE score_matrix and traceback_matrix with dimensions:
         (length of seq1 + 1) × (length of seq2 + 1)
 
     INITIALIZE both matrices with zeros
@@ -178,7 +165,6 @@ smith_waterman()
 
     FOR each position i in seq1:
         FOR each position j in seq2:
-
             (score, trace) ← CalculateScore(
                 score_matrix, seq1, seq2,
                 i, j, match, mismatch, gap
@@ -186,6 +172,8 @@ smith_waterman()
 
             STORE score in score_matrix[i][j]
             STORE trace in traceback_matrix[i][j]
+
+            Check that score is not negative
 
             IF score is greater than max_score:
                 max_score ← score
@@ -284,14 +272,21 @@ In practice, bioinformatics analysis follows a connected and often iterative pip
 Quality-control checks should therefore be performed before and after each major stage. Before alignment, the sequence data should be checked for issues such as incorrect formatting, ambiguous characters, contamination, or incomplete sequences. After alignment, the scores, aligned regions, gaps, and biological plausibility of the results should be evaluated before the data are used in downstream analyses. This process limits the propagation of errors and supports reliable, reproducible biological conclusions.
 
 # Successes
-Description of the team's learning points
+**Matrix traversal:** We were able to understand the premise of the project, and successfully store and access scores is terms of `match`, `mistmatch`, and `gap` points in `score_matrix`. Additionally, we were able to store directions in our `traceback_matrix` (`left`, `up`, and `diag`) and use those to trace back from `max_pos` where we stored the maximum score of the alignment.
+
+**Scoring strategy:** We were able to successfully implement a dynamic scoring system that allowed for customizable match, mistmatch, and gap penalties.
+
 
 # Struggles
-Description of the stumbling blocks the team experienced
+**Scoring parameters:** Initially, we had some confusion when it came to the scoring. We misinterpreted the instruction and comments from the class, thinking that we should not include pentalies with negative numbers. It took playing around with the scoring metrics and conducting a bit of further research, to realize that it was in fact the scores themselves that were stored in the matrix that should not be negative. We addressed this by adding a one line check to make sure that if the score in the current matrix was negative, we should replace it with `0`.
+
+**Reversal of strands:** We also had to print out our aligned sequences to realize that they were returning in reverse order. This was also an easy fix, by using `aligned_seq1 = aligned_seq1[::-1]` and `aligned_seq2 = aligned_seq2[::-1]`
 
 # Personal Reflections
-## Group Leader
-Group leader's reflection on the project
+## Group Leader: Maggie Wenger
+This project was a lot of fun for me! I think it was great to have a project that was a little bit easier to understand from the jump, and allowed me to focus more heavily on the biological context and usage for this algorithm. I think it was also great practice for me with matrices: I have had exposure to them and coded with them before, but not for a while, so it was nice to dive back into that previous knowledge. 
+
+Something I would have like to implement if we had more time would be the use of numpy broadcasting. I remember we spoke briefly about it during class, and upon research seems like a very efficient way to edit and apply calculations to matrices. I also spent a lot of time playing around with different scoring options, as it seems biologically that a gap should be penalized more than a mismatch. I couldn't come up with a way to make this work functionally, but would have liked some more time to play around with these parameters.
 
 ## Other member
 Other members' reflections on the project

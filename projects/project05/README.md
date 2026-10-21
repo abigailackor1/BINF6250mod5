@@ -271,16 +271,47 @@ In practice, bioinformatics analysis follows a connected and often iterative pip
 
 Quality-control checks should therefore be performed before and after each major stage. Before alignment, the sequence data should be checked for issues such as incorrect formatting, ambiguous characters, contamination, or incomplete sequences. After alignment, the scores, aligned regions, gaps, and biological plausibility of the results should be evaluated before the data are used in downstream analyses. This process limits the propagation of errors and supports reliable, reproducible biological conclusions.
 
+## In Comparison to EMBOSS Water 
+
+The EMBOSS Water tool utilizes the Smith-Waterman algorithm with modified parameters for speed enhancements. Out of curiosity, we used the test sequence given from the lecture slides to compare our code to an actual standardized tool. Here are the parameters we used on the tool interface: 
+1. Sequence Type: DNA
+2. First Sequence:
+
+>test1
+TACTTAG
+
+3. Second Sequence:
+
+>test2
+CACATTAA
+
+5. Output format: Pair (to perform pairwise alignment)
+6. Title: Test
+
+Here is the outcome: 
+
+<img width="628" height="672" alt="Screenshot 2026-10-21 at 2 18 47 AM" src="https://github.com/user-attachments/assets/d00ef578-ebae-4fb5-9238-d0fffeef2321" />
+
+
+### Mini-Reflection on Our Code and EMBOSS Water
+
+It is really interesting to view the differences in alignment. As we had mentioned before, the scoring scheme does have an impact on alignment, as our results produce a different output than EMBOSS Water. If we had more time, we would have taken additional steps to learn more about the tool and its outputs along with a comparison to other existing alignment tools. We think that this highlights the issue of standardization and reproducibility in Bioinformatics; with many new tools and researchers creating their own pipelines, it can be difficult to traceback results due to the various options of tools and parameters. 
+
 # Successes
 **Matrix traversal:** We were able to understand the premise of the project, and successfully store and access scores is terms of `match`, `mistmatch`, and `gap` points in `score_matrix`. Additionally, we were able to store directions in our `traceback_matrix` (`left`, `up`, and `diag`) and use those to trace back from `max_pos` where we stored the maximum score of the alignment.
 
 **Scoring strategy:** We were able to successfully implement a dynamic scoring system that allowed for customizable match, mistmatch, and gap penalties.
 
+**Biological understanding:** We were able to grasp an understanding of how the Smith-Waterman algorithm is applied to optimize the local alignment of two sequences. We learned that there will be limitations to the overall algorithm and our code due to variability. 
+
+**Comparison to an Actual Tool:** We were able to set aside time to try and compare the outputs of our code to an existing tool. This validated our limitation that the scoring scheme truly does matter and can affect alignment. One has to consider how we would score matches, mismatches and gaps and determine the weight of each one. It is not a simple "choose whichever numbers we would like to pick". 
 
 # Struggles
 **Scoring parameters:** Initially, we had some confusion when it came to the scoring. We misinterpreted the instruction and comments from the class, thinking that we should not include pentalies with negative numbers. It took playing around with the scoring metrics and conducting a bit of further research, to realize that it was in fact the scores themselves that were stored in the matrix that should not be negative. We addressed this by adding a one line check to make sure that if the score in the current matrix was negative, we should replace it with `0`.
 
 **Reversal of strands:** We also had to print out our aligned sequences to realize that they were returning in reverse order. This was also an easy fix, by using `aligned_seq1 = aligned_seq1[::-1]` and `aligned_seq2 = aligned_seq2[::-1]`
+
+**Numpy Broadcasting**: Due to a time constraint, we were unable to implement the broadcasting function in Numpy. From our understanding this function would "arrays with different shapes during arithmetic operations" as said from the Numpy manual. We learned that this function can be helpful in algorithm implementation, but also has its constraints as well (e.g. inefficient use of memory that can slow computation). 
 
 # Personal Reflections
 ## Group Leader: Maggie Wenger
@@ -290,6 +321,12 @@ Something I would have like to implement if we had more time would be the use of
 
 ## Other member
 Other members' reflections on the project
+
+## Other member: Kailey Solorzano
+
+The project was a refresher in comparison to previous projects. A learning curve was understanding the biological context over a computed output. I feel that this week, I was able to dive deep into the Smith-Waterman algorithm and take into consideration how this is used in genome alignment. The provided data is only a sample that was generated so I wonder how our code would compare to an actual targeted sequence. 
+
+With this given project, I was able to take a moment to reflect on dynammic programming and using matrices on Python. My experience with matrices stems from using on R so it was interesting to utilize a different coding language for something similar. I also took a moment to reflect on dynamic programming as a whole- taking a large problem and creating smaller sub-problems that will make it easier to code, also that it is okay to not produce an output. This project altered my thinking on how to approach future projects as I learned to take a few days to digest the material and remember that bioinformatics is both biology and coding. 
 
 # Generative AI Appendix
 Anthropic, Sonnet 5.5. 2026. Claude [Large language model]. https://claude.ai
